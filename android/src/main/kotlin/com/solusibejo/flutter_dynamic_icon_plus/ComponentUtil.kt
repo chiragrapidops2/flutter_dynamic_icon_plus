@@ -18,11 +18,16 @@ object ComponentUtil {
     ) {
         val componentName = ComponentName(context, componentNameString)
 
-        packageManager.setComponentEnabledSetting(
-            componentName,
-            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-            PackageManager.DONT_KILL_APP
-        )
+        try {
+            packageManager.setComponentEnabledSetting(
+                componentName,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
     }
 
     private fun disable(
@@ -137,7 +142,10 @@ object ComponentUtil {
                 val activities = info.activities
                 if (activities != null) {
                     for (activityInfo in activities) {
-                        if (activityInfo.targetActivity == null) {
+                        if (activityInfo.targetActivity == null && activityInfo.name.contains(
+                                packageName
+                            )
+                        ) {
                             components.add(ComponentName(packageName, activityInfo.name))
                         }
                     }
@@ -149,7 +157,7 @@ object ComponentUtil {
             return components
         }
         // If activityName is not null, return a list with single component
-        return listOf(ComponentName(packageName, activityName))
+        return listOf(ComponentName(packageName, "$packageName.$activityName"))
     }
 
     fun changeAppIcon(context: Context, packageManager: PackageManager, packageName: String){
@@ -165,6 +173,8 @@ object ComponentUtil {
                         setupIcon(context, packageManager, packageName, name, currentlyEnabled?.name)
                     }
                 }
+            } else {
+                setupIcon(context, packageManager, packageName, name, currentlyEnabled?.name)
             }
         }
     }

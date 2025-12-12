@@ -19,9 +19,9 @@ class FlutterDynamicIconPlusService: Service() {
     }
 
     override fun onDestroy() {
-        ComponentUtil.changeAppIcon(this, packageManager, packageName)
+        /*ComponentUtil.changeAppIcon(this, packageManager, packageName)
 
-        ComponentUtil.removeCurrentAppIcon(this)
+        ComponentUtil.removeCurrentAppIcon(this)*/
 
         super.onDestroy()
         stopSelf()

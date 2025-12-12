@@ -167,7 +167,11 @@ object ComponentUtil {
             Log.d("changeAppIcon", "Currently Enabled: $currentlyEnabled")
             Log.d("changeAppIcon", "Will Enabled: $name")
 
-            if(name != null){
+            if (currentlyEnabled?.name != name) {
+                setupIcon(context, packageManager, packageName, name, currentlyEnabled?.name)
+            }
+
+            /*if(name != null){
                 if(name.isNotEmpty()){
                     if(currentlyEnabled?.name != name){
                         setupIcon(context, packageManager, packageName, name, currentlyEnabled?.name)
@@ -175,7 +179,7 @@ object ComponentUtil {
                 }
             } else {
                 setupIcon(context, packageManager, packageName, name, currentlyEnabled?.name)
-            }
+            }*/
         }
     }
 

@@ -86,18 +86,21 @@ class FlutterDynamicIconPlusPlugin: FlutterPlugin, MethodCallHandler, ActivityAw
           result.error("500", "Activity not found", "Activity didn't attached")
         }
       }
-      MethodNames.supportsAlternateIcons -> {
-        if(activity != null){
-          val packageInfo = ComponentUtil.packageInfo(activity!!)
-          //By default, we have one activity (MainActivity).
-          //If there is more than one activity, it indicates that we have an alternative activity
-          val isAlternateAvailable = packageInfo.activities?.size ?: 0 > 1
-          result.success(isAlternateAvailable)
+        MethodNames.supportsAlternateIcons -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (activity != null) {
+                    val packageInfo = ComponentUtil.packageInfo(activity!!)
+                    //By default, we have one activity (MainActivity).
+                    //If there is more than one activity, it indicates that we have an alternative activity
+                    val isAlternateAvailable = packageInfo.activities?.size ?: 0 > 1
+                    result.success(isAlternateAvailable)
+                } else {
+                    result.success(false)
+                }
+            } else {
+                result.success(false)
+            }
         }
-        else {
-          result.success(false)
-        }
-      }
       MethodNames.getAlternateIconName -> {
         if(activity != null){
             val enabledComponent = ComponentUtil.getCurrentEnabledAlias(activity!!)
